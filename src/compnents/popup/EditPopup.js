@@ -1,18 +1,20 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { editContact } from '../../redux/actions/editContact';
 
 import ContactForm from '../form/ContactForm';
 
 import './editPopup.css';
 
-const EditPopup = ({ closeHandler, editHandler, action, user }) => {
-    console.log(user)
+const EditPopup = ({ closeHandler,  action, user }) => {
+    
     return (
         <div className="popup">
             <div className="popup_open">
                 <div className="box">
                     <ContactForm
                         cancelHandler={closeHandler}
-                        clickHandler={editHandler}
+
                         action={action}
                         user={user}
                     />

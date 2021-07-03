@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { createContact } from '../../redux/actions/createContact';
+import { editContact } from '../../redux/actions/editContact';
 
 import inputs from '../../constants/inputs';
 
 import './contactForm.css';
 
-const ContactForm = ({ clickHandler, cancelHandler, action, user }) => {
+const ContactForm = ({  cancelHandler, action, user, createContact }) => {
     const [us, setUs] = useState(user);
     const changeHandler = (e) => {
         setUs((prev) => {
@@ -14,9 +17,15 @@ const ContactForm = ({ clickHandler, cancelHandler, action, user }) => {
                 [e.target.name]: e.target.value,
             };
         });
+        
     };
+    const createNewContact = (e) => {
+        e.preventDefault()
+        
+        createContact(us)
+    }
     return (
-        <form className="userform" onSubmit={(e) => clickHandler(e, us)}>
+        <form className="userform" onSubmit={e => createNewContact(e)}>
             {inputs.map((input) => {
                 let { name } = input;
                 return (
@@ -46,4 +55,4 @@ const ContactForm = ({ clickHandler, cancelHandler, action, user }) => {
     );
 };
 
-export default ContactForm;
+export default connect(null, {createContact, editContact})(ContactForm);

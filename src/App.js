@@ -1,4 +1,3 @@
-import { div } from 'prelude-ls';
 import React, { useState } from 'react';
 import ContactForm from './compnents/form/ContactForm';
 import List from './compnents/list/List';
@@ -7,38 +6,38 @@ import EditPopup from './compnents/popup/EditPopup';
 import { validate } from './util/emailValidation';
 import { urlValidate } from './util/is-image-url';
 import errorMessages from './constants/errorMessages';
+import { connect } from 'react-redux';
+import {messageAction} from '../src/redux/actions/messageAction'
+import {popupAction} from '../src/redux/actions/popupAction'
 
-const App = () => {
+const App = ({message,popup ,popupAction,messageAction}) => {
     const [open, setOpen] = useState(false);
-    const [edit, setEdit] = useState(false);
     const [isOnline, setIsOnline] = useState(true);
     const [action, setAction] = useState('Add');
     const [isValideUrl, setIsValideUrl] = useState('error');
     const [users, setUsers] = useState([]);
     const [index, setIndex] = useState('');
-    const [message, setMessage] = useState('');
-
     const showHandler = () => setOpen((prev) => !prev);
 
     const clickHandler = async (e, data) => {
         const { name, surname, email, photo, phone } = data || {} ;
         e.preventDefault();
         if (!phone || !name || !surname || !email || !photo) {
-            setMessage(errorMessages.fill);
+            messageAction(errorMessages.fill);
             return;
         }
         if (!(name.length || surname.length)) {
-            setMessage(errorMessages.name);
+            messageAction(errorMessages.name);
             return;
         }
 
         if (!validate(email)) {
-            setMessage(errorMessages.email);
+            messageAction(errorMessages.email);
             return;
         }
 
         if (phone.includes(' ')) {
-            setMessage(errorMessages.phone);
+            messageAction(errorMessages.phone);
             return;
         }
 
@@ -46,7 +45,7 @@ const App = () => {
         setIsValideUrl(res);
         if (isValideUrl !== 'success') {
             console.log(isValideUrl);
-            setMessage(errorMessages.photo);
+            messageAction(errorMessages.photo);
             return;
         }
         setUsers((prev) => {
@@ -67,30 +66,20 @@ const App = () => {
 
     const popupHandler = (index) => {
         setAction('Save');
-        setEdit((prev) => !prev);
+        popupAction()
         setIndex(index);
     };
 
-    const deleteHandler = (index) => {
-        let del = window.confirm('Are you sure you want to delete?');
-        if (!del) {
-            return;
-        } else {
-            setUsers((prev) => {
-                prev.splice(index, 1);
-                return prev;
-            });
-        }
-    };
+   
 
     const alertHandler = () => {
-        setMessage('');
+        messageAction('')
     };
 
     const closeHandler = (e) => {
         e.preventDefault()
         setAction('Add');
-        setEdit((prev) => !prev);
+        popupAction()
     };
 
     return (
@@ -114,15 +103,12 @@ const App = () => {
                     </div>
                     <div>
                         <List
-                            users={users}
                             popupHandler={popupHandler}
-                            deleteHandler={deleteHandler}
                         />
                     </div>
-                    {edit && (
+                    {popup && (
                         <EditPopup
                             closeHandler={closeHandler}
-                            editHandler={editHandler}
                             action={action}
                             user={users[index]}
                         />
@@ -135,4 +121,13 @@ const App = () => {
     );
 };
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        users: state.contact.users,
+        message: state.contact.message,
+        popup:state.contact.popup
+    }
+}
+
+export default connect(mapStateToProps, {messageAction, popupAction})(App)
+

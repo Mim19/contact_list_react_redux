@@ -1,8 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { deleteContact } from '../../redux/actions/deleteContact';
 
 import './listItem.css';
 
-const ListItem = ({ index, user, popupHandler, deleteHandler }) => {
+const ListItem = ({ index, user, popupHandler,  deleteContact }) => {
+const deleteHandler = () => {
+    let del = window.confirm('Are you sure you want to delete?');
+    if (!del) {
+        return;
+    } else {   
+        deleteContact(index)
+    }
+}
 
     return (
         <li className="list scale-in-center" key={index}>
@@ -24,11 +34,11 @@ const ListItem = ({ index, user, popupHandler, deleteHandler }) => {
             </div>
             <div>
                 <i
-                    onClick={() => popupHandler(index)}
+                    onClick={popupHandler}
                     className="fas fa-user-edit fa-lg icon"
                 />
                 <i
-                    onClick={() => deleteHandler(index)}
+                    onClick={deleteHandler}
                     className="fas fa-user-times fa-lg icon"
                 />
             </div>
@@ -36,4 +46,5 @@ const ListItem = ({ index, user, popupHandler, deleteHandler }) => {
     );
 };
 
-export default ListItem;
+
+export default connect(null, {deleteContact})(ListItem);
