@@ -1,13 +1,16 @@
 span {
-    margin-right: 10px;
-  }
-  
-  img {
-    margin-right: 10px;
-    height: 50px;
-  }
-  
-  .name .surname {
-    font-weight: bold;
-  }
-  
+  margin-right: 10px;
+}
+
+img {
+  margin-right: 10px;
+  height: 50px;
+}
+
+.name .surname {
+  font-weight: bold;
+}
+
+.g {
+  color: green;
+}

@@ -1,20 +1,31 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { editContact } from '../../redux/actions/editContact';
+
+import { editContact } from '../../actions/contacts';
+import Alert from '../alert/Alert';
 
 import ContactForm from '../form/ContactForm';
 
 import './editPopup.css';
 
-const EditPopup = ({ closeHandler,  action, user }) => {
-    
+const EditPopup = ({
+    popupHandler,
+    action,
+    user,
+    message,
+    editHandler,
+    alertHandler,
+}) => {
     return (
         <div className="popup">
             <div className="popup_open">
+                {message && (
+                    <Alert message={message} alertHandler={alertHandler} />
+                )}
                 <div className="box">
                     <ContactForm
-                        cancelHandler={closeHandler}
-
+                        clickHandler={editHandler}
+                        cancelHandler={popupHandler}
                         action={action}
                         user={user}
                     />
@@ -24,4 +35,4 @@ const EditPopup = ({ closeHandler,  action, user }) => {
     );
 };
 
-export default EditPopup;
+export default connect(null, { editContact })(EditPopup);

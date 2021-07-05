@@ -2,10 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import store from '../src/redux/config/index'
+import store from '../src/config/store';
 import { Provider } from 'react-redux'
-
-
 
 ReactDOM.render(
   <React.StrictMode>
@@ -15,5 +13,3 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-

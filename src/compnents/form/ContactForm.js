@@ -1,31 +1,27 @@
 import React, { useState } from 'react';
+
 import { connect } from 'react-redux';
-import { createContact } from '../../redux/actions/createContact';
-import { editContact } from '../../redux/actions/editContact';
+import { createContact, editContact } from '../../actions/contacts';
 
 import inputs from '../../constants/inputs';
 
 import './contactForm.css';
 
-const ContactForm = ({  cancelHandler, action, user, createContact }) => {
+const ContactForm = ({ cancelHandler, action, user, clickHandler }) => {
     const [us, setUs] = useState(user);
     const changeHandler = (e) => {
         setUs((prev) => {
             return {
                 ...prev,
                 isOnline: true,
+                isFavorite:false,
                 [e.target.name]: e.target.value,
             };
         });
-        
     };
-    const createNewContact = (e) => {
-        e.preventDefault()
-        
-        createContact(us)
-    }
+
     return (
-        <form className="userform" onSubmit={e => createNewContact(e)}>
+        <form className="userform" onSubmit={e => clickHandler(e, us)}>
             {inputs.map((input) => {
                 let { name } = input;
                 return (
@@ -50,6 +46,7 @@ const ContactForm = ({  cancelHandler, action, user, createContact }) => {
             )}
             <div>
                 <button className="btn">{action}</button>
+               
             </div>
         </form>
     );
