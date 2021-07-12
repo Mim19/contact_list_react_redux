@@ -5,7 +5,15 @@ import {
     FAVORITE,
     MESSAGE,
     POPUP,
+    // SET_Contact,
 } from './types';
+
+// export const setContact = (id) => {
+//     return {
+//         type: SET_Contact,
+//         payload: id,
+//     }
+// }
 
 export const createContact = (user) => {
     return {

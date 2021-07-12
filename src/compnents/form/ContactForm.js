@@ -7,7 +7,13 @@ import inputs from '../../constants/inputs';
 
 import './contactForm.css';
 
-const ContactForm = ({ cancelHandler, action, user, clickHandler }) => {
+const mapStateToProps = (state) => {
+    return {
+        users: state.contact.users,
+    };
+};
+
+const ContactForm = ({ cancelHandler, action, user, clickHandler, users }) => {
     const [us, setUs] = useState(user);
     const changeHandler = (e) => {
         setUs((prev) => {
@@ -16,12 +22,13 @@ const ContactForm = ({ cancelHandler, action, user, clickHandler }) => {
                 isOnline: true,
                 isFavorite:false,
                 [e.target.name]: e.target.value,
+                id: users[users.length-1] ?.id+1 || 0,
             };
         });
     };
 
-    return (
-        <form className="userform" onSubmit={e => clickHandler(e, us)}>
+    return (            
+        <form className="userform" onSubmit={e => {clickHandler(e, us)}}> 
             {inputs.map((input) => {
                 let { name } = input;
                 return (
@@ -46,10 +53,9 @@ const ContactForm = ({ cancelHandler, action, user, clickHandler }) => {
             )}
             <div>
                 <button className="btn">{action}</button>
-               
             </div>
         </form>
     );
 };
 
-export default connect(null, {createContact, editContact})(ContactForm);
+export default connect(mapStateToProps, {createContact, editContact})(ContactForm);

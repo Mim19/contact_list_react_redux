@@ -12,25 +12,32 @@ let initialState = {
     index: '',
     popup: false,
     message: '',
-};
+};  
 
-export const contactReducer = (state = initialState, action) => {
-    switch (action.type) {
+export const contactReducer = (state = initialState, { type, payload }) => {
+    switch (type) {
         case CREATE_CONTACT:
+            // return {
+            //     ...state,
+            //     users: [
+            //         ...state.users,
+            //         payload
+            //     ],
+            // };
             return {
                 ...state,
-                users: state.users.concat(action.payload),
+                users: state.users.concat(payload),
             };
 
         case DELETE_CONTACT:
-            state.users.splice(action.payload, 1);
+            state.users.splice(payload, 1);
             return {
                 ...state,
                 users: [...state.users],
             };
 
         case EDIT_CONTACT:
-            const { id, userData } = action.payload;
+            const { id, userData } = payload;
             state.users[id] = userData;
             return {
                 ...state,
@@ -47,11 +54,11 @@ export const contactReducer = (state = initialState, action) => {
         case MESSAGE:
             return {
                 ...state,
-                message: action.payload,
+                message: payload,
             };
 
         case FAVORITE:
-            const i = action.payload;
+            const i = payload;
 
             state.users[i].isFavorite = !state.users[i].isFavorite;
             return {
